@@ -1,0 +1,36 @@
+---
+- hosts: all
+  gather_facts : no
+  become: yes
+  tasks:
+    - name: create file
+      file:
+        dest: .txt
+        state: touch
+      delegate_to: localhost
+
+    - name: Copy and Run Script
+      script: backup.sh --creates /tmp
+      register: op
+      become: yes
+
+    - name: append
+      lineinfile:
+        dest: output.txt
+        line: "{{ op.stdout }}"
+        insertafter: EOF
+      delegate_to: localhost
+
+    - name: Remove script from the server
+      file:
+        state: absent
+        path: /tmp/backup.sh
+
+    - name: Fetch all the file on local
+      fetch:
+        src: /tmp/backup.tar.gz
+        dest: /tmp/backup/*
+        flat: yes
+
+    - name: Remove all the backup folder
+      shell: rm -rf /tmp/backup*
