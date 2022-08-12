@@ -1,6 +1,6 @@
 ## Ansible script backup for linux-user
 
-**Just add/edit users you want to backup in backup.sh in place of usr1 usr2 and run ansible-playbook with root user**
+**You have to just add/edit users you want to backup in backup.sh in place of user1 user2 and run ansible-playbook with root user**
 
 **Script for backing up user directory**
 
